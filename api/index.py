@@ -8,10 +8,14 @@ def handler(request, response):
         response.status_code = 405
         return response.send("Method Not Allowed")
 
-    # Resolve the correct path to marks.json
+    # Correct path to marks.json
     json_path = os.path.join(os.path.dirname(__file__), "..", "marks.json")
-    with open(json_path, "r") as f:
-        data = json.load(f)
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        response.status_code = 500
+        return response.send("marks.json not found")
 
     names = request.query.get("name", [])
     if isinstance(names, str):
