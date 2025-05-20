@@ -1,5 +1,3 @@
-
-
 import json
 import os
 
@@ -10,7 +8,9 @@ def handler(request, response):
         response.status_code = 405
         return response.send("Method Not Allowed")
 
-    with open(os.path.join(os.path.dirname(__file__), "../marks.json")) as f:
+    # Resolve the correct path to marks.json
+    json_path = os.path.join(os.path.dirname(__file__), "..", "marks.json")
+    with open(json_path, "r") as f:
         data = json.load(f)
 
     names = request.query.get("name", [])
